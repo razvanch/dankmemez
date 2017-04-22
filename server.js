@@ -8,19 +8,29 @@ const routes = require('./routes');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
- 
-// default options 
+var blobStorage = require('./storage');
+
+// default options
 app.use(fileUpload());
 
 app.set('port', process.env.PORT || 3000);
- 
+
 app.post('/upload', function(req, res) {
   if (!req.files)
     return res.status(400).send('No files were uploaded.');
- 
+
   let sampleFile = req.files.sampleFile;
- 
+
   console.log(sampleFile);
+
+  // blobStorage.uploadFile("pictures", sampleFile.data, sampleFile.name);
+  // workaround
+  sampleFile.mv('/tmp/' + sampleFile.name, function(error) {
+    if(error)
+      console.log("csf,ncsf...nu merge!");
+    blobStorage.uploadFile("pictures", sampleFile.name,'/tmp/' + sampleFile.name);
+  });
+
 
   res.status(200).send(sampleFile.name);
 });
@@ -30,7 +40,7 @@ app.get('/upload', function(req, res) {
               "<body>" +
                 "<form ref='uploadForm' " +
                   "id='uploadForm' " +
-                  "action='http://icaption.azurewebsites.net/upload' " +
+                  "action='http://localhost:3000/upload' " +
                   "method='post' " +
                   "encType='multipart/form-data'>" +
                     "<input type='file' name='sampleFile' />" +

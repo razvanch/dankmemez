@@ -1,3 +1,4 @@
+"use strict";
 
 var fs = require('fs');
 var util = require('util');
@@ -6,6 +7,37 @@ var crypto = require('crypto');
 var storage = require('azure-storage');
 var config = require('./config');
 
+
+function uploadFile(containerName, blobName, fileName) {
+  // Create a blob client for interacting with the blob service from connection string
+  // How to create a storage connection string - http://msdn.microsoft.com/en-us/library/azure/ee758697.aspx
+  var blobService = storage.createBlobService(config.connectionString);
+
+  // console.log('Uploading files from path ' + path);
+
+  // Create a container for organizing blobs within the storage account.
+  console.log('Creating Container');
+  blobService.createContainerIfNotExists(containerName, {publicAccessLevel : 'blob'}, function (error) {
+    if (error) throw error;
+
+        // var file =  path + "/" + items[i];
+        console.log("Uploading file " +  fileName + " in container " + containerName + " as " + blobName);
+        // var blockBlobName = containerName + "-" + items[i];
+        // blobService.createBlockBlobFromLocalFile(containerName, blockBlobName, file, function (error) {
+        //   if (error) throw error;
+        // });
+        blobService.createBlockBlobFromLocalFile(containerName, blobName, fileName, function(error){
+          // blobService.createBlockBlobFromText(containerName, fileName, fileStream, function(error){
+          if(!error){
+              // Blob uploaded
+              fs.unlink(fileName, (err) => {
+                if (err) throw err;
+                console.log('successfully deleted from server: ' + fileName);
+              });
+          }
+        });
+  });
+}
 
 function uploadFilesFromFolder(containerName, path) {
   // Create a blob client for interacting with the blob service from connection string
@@ -17,7 +49,7 @@ function uploadFilesFromFolder(containerName, path) {
   // Create a container for organizing blobs within the storage account.
   console.log('Creating Container');
   blobService.createContainerIfNotExists(containerName, {publicAccessLevel : 'blob'}, function (error) {
-    if (error) return callback(error);
+    if (error) throw error;
 
     fs.readdir(path, function(err, items) {
       // console.log(items);
@@ -131,18 +163,27 @@ function zeroPaddingString(str, len) {
   }
 }
 
+module.exports.uploadFilesFromFolder = uploadFilesFromFolder;
+module.exports.uploadFile = uploadFile;
+module.exports.downloadFileFromStorage = downloadFileFromStorage;
+module.exports.listBlobs = listBlobs;
+
 
 // Testing
 
 // uploadFilesFromFolder("pictures", "./images");
+// uploadFilesFromFolder("pictures", "./images");
 // downloadFileFromStorage("pictures", "pictures-img_9gag_a2rLGEd_460s.jpg", null);
 // downloadFileFromStorage("pictures", "pictures-img_9gag_a2rLGEd_460s.jpg", "downloadedPicture");
 
-var blobService = storage.createBlobService(config.connectionString);
-listBlobs(blobService, "pictures", null, null, null, function (error, results) {
-        if (error) return callback(error);
+// var blobService = storage.createBlobService(config.connectionString);
+// listBlobs(blobService, "pictures", null, null, null, function (error, results) {
+//         if (error) throw error;
 
-        for (var i = 0; i < results.length; i++) {
-          console.log(util.format('   - %s (type: %s)'), results[i].name, results[i].blobType);
-        }
-    });
+//         let baseUrl = "https://memezstorage.blob.core.windows.net/";
+
+//         for (var i = 0; i < results.length; i++) {
+//           console.log(util.format('   - %s (type: %s)'), results[i].name, results[i].blobType);
+//           console.log(baseUrl + "pictures/" + results[i].name);
+//         }
+//     });
