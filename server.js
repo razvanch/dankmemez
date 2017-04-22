@@ -45,7 +45,7 @@ app.get('/capture', function(req, res) {
 
   require("node-webcam" ).capture( "test_picture", captureOpts, function(err, loc) {
     if (!err) {
-      res.send("<img src=" + loc + " </p>");
+      res.send("<img src=./" + loc + " </p>");
     }
     else
       console.log("capture error!");
@@ -79,7 +79,7 @@ app.post('/upload', function(req, res) {
       res.send({ Grrr: error });
       return;
     }
-    
+
     console.log('Creating blob at URL:', BLOB_BASE_URL + name);
 
     caption.getCaptionFromUrl(BLOB_BASE_URL + name)
