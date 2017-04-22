@@ -9,7 +9,7 @@ html
           each img in line
             div(class='imgWrapper')
               img(src=img.url, class='feedImg')
-              div #{img.caption}
+              div(title=img.caption) #{img.caption}
     div(class='footerWrapper')
       form(ref='uploadForm', class='addButton', action='/upload', method='post', encType='multipart/form-data')
         div(class='fileInputBox') +

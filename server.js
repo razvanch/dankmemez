@@ -75,7 +75,8 @@ app.post('/upload', function(req, res) {
     image.save(function(err) {
       if (err) throw err;
 
-      res.json(image);
+			res.redirect('/feed');
+      //res.json(image);
     });
   }
 
@@ -97,11 +98,20 @@ app.post('/upload', function(req, res) {
 
       name = part.filename;
 
-      blobService.createBlockBlobFromStream('pictures', name, part, size, blobSaved);
+      console.log(part.headers['content-type']);
+
+      blobService.createBlockBlobFromStream('pictures',
+                                            name,
+                                            part,
+                                            size,
+                                            { contentSettings:
+                                              { contentType: part.headers['content-type'] }
+                                            },
+                                            blobSaved);
 
       return;
     }
-  console.log(form, form.handlepart)
+  	console.log(form, form.handlepart)
     form.handlePart(part);
   });
 
@@ -136,6 +146,10 @@ app.get('/feed', function(req, res) {
   });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+blobService.createContainerIfNotExists('pictures', {publicAccessLevel : 'blob'}, function (error) {
+  if (error) throw error;
+
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+  });
 });
