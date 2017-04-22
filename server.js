@@ -13,6 +13,7 @@ const config = require('./config');
 const multiparty = require('multiparty');
 const caption = require('./caption');
 const mongoose = require('mongoose');
+const _ = require('lodash')
 
 mongoose.connect(config.mongodbConnectionString);
 
@@ -23,6 +24,9 @@ const blobService = azure.createBlobService(config.connectionString);
 
 const BLOB_BASE_URL = 'https://memezstorage.blob.core.windows.net/pictures/';
 
+app.use(express.static('public'))
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jade')
 
 app.set('port', process.env.PORT || 3000);
 
@@ -45,7 +49,8 @@ app.get('/capture', function(req, res) {
 
   require("node-webcam" ).capture( "test_picture", captureOpts, function(err, loc) {
     if (!err) {
-      res.send("<img src=" + loc + " </p>");
+      url = req.protocol + '://' + req.get('host') + '/' + loc
+      res.send("<img src=" + url + " </p>");
     }
     else
       console.log("capture error!");
@@ -96,7 +101,7 @@ app.post('/upload', function(req, res) {
 
       return;
     }
-
+  console.log(form, form.handlepart)
     form.handlePart(part);
   });
 
@@ -119,11 +124,15 @@ app.get('/upload', function(req, res) {
           "</html>");
 });
 
-app.get('/images', function(req, res) {
+app.get('/feed', function(req, res) {
+  
+
   CaptionImage.find({}, function(err, images) {
     if (err) throw err;
 
-    res.json(images);
+    //res.json(images);
+    var dataArray = Object.keys(images).map((k) => images[k]);
+    res.render('imageFeed', {data: _.chunk(dataArray, 4)});
   });
 });
 

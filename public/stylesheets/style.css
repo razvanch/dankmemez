@@ -1,8 +1,67 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: Jura;
 }
 
 a {
   color: #00B7FF;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.footerWrapper {
+	position: fixed;
+	top: 80%;
+	left: 93%;
+	width: 100px;
+}
+
+.fileInput, .fileSubmit {
+	opacity: 0;
+    width: 40px;
+    height: 40px;
+	position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fileInputBox, .fileSubmitBox {
+	width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+	border-radius: 50%;
+	background-color: #e6e6e6;
+	position: relative;
+}
+
+.feedWrapper {
+	width: 95%;
+	margin: auto;
+	padding-top: 20px;
+    border-top: 1px rgb(195, 195, 195) solid;
+}
+
+.feedLine {
+	padding: 10px;
+}
+
+.feedImg {
+	width: 250px;
+	border-radius: 5px;
+}
+
+.imgWrapper {
+	display: inline-block;
+	vertical-align: top;
+	margin: 10px;
+	padding: 4px;
+	background-color: #e6e6e6;
+}
+
+.imgWrapper > div {
+	color: #2e41a9;
+	text-align: center;
 }

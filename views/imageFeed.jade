@@ -1,0 +1,18 @@
+html
+  head
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Jura')
+  body
+    div(class='feedWrapper')
+      each line in data
+        div(class='feedLine')
+          each img in line
+            div(class='imgWrapper')
+              img(src=img.url, class='feedImg')
+              div #{img.caption}
+    div(class='footerWrapper')
+      form(ref='uploadForm', class='addButton', action='/upload', method='post', encType='multipart/form-data')
+        div(class='fileInputBox') +
+          input(type='file', class='fileInput', name='sampleFile')
+        div(class='fileSubmitBox') =
+          input(type='submit', class='fileSubmit')
