@@ -8,39 +8,51 @@ const routes = require('./routes');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
-var blobStorage = require('./storage');
+const azure = require('azure-storage');
+const config = require('./config');
+const multiparty = require('multiparty');
+
+// var blobStorage = require('./storage');
 
 // default options
-app.use(fileUpload());
+const blobService = azure.createBlobService(config.connectionString);
 
 app.set('port', process.env.PORT || 3000);
 
 app.post('/upload', function(req, res) {
-  if (!req.files)
-    return res.status(400).send('No files were uploaded.');
+    let form = new multiparty.Form();
 
-  let sampleFile = req.files.sampleFile;
+    form.on('part', function(part) {
+      if (part.filename) {
+        console.log(part.filename);
 
-  console.log(sampleFile);
+        let size = part.byteCount - part.byteOffset;
+        let name = part.filename;
 
-  // blobStorage.uploadFile("pictures", sampleFile.data, sampleFile.name);
-  // workaround
-  sampleFile.mv('/tmp/' + sampleFile.name, function(error) {
-    if(error)
-      console.log("csf,ncsf...nu merge!");
-    blobStorage.uploadFile("pictures", sampleFile.name,'/tmp/' + sampleFile.name);
-  });
+        blobService.createBlockBlobFromStream('pictures', name, part, size, function(error) {
+          if (error) {
+            res.send({ Grrr: error });
+          } else {
+            res.send('OK');
+          }
+        });
+      } else {
+          form.handlePart(part);
+      }
+    });
 
-
-  res.status(200).send(sampleFile.name);
+    form.parse(req);
 });
+
+const API_BASE_URL = 'http://icaption.azurewebsites.net/';
+// const API_BASE_URL = 'http://localhost:3000/';
 
 app.get('/upload', function(req, res) {
   res.send("<html>" +
               "<body>" +
                 "<form ref='uploadForm' " +
                   "id='uploadForm' " +
-                  "action='http://localhost:3000/upload' " +
+                  "action='" + API_BASE_URL + "upload' " +
                   "method='post' " +
                   "encType='multipart/form-data'>" +
                     "<input type='file' name='sampleFile' />" +
