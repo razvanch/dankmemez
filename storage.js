@@ -30,10 +30,10 @@ function uploadFile(containerName, blobName, fileName) {
           // blobService.createBlockBlobFromText(containerName, fileName, fileStream, function(error){
           if(!error){
               // Blob uploaded
-              fs.unlink(fileName, (err) => {
-                if (err) throw err;
-                console.log('successfully deleted from server: ' + fileName);
-              });
+              // fs.unlink(fileName, (err) => {
+                // if (err) throw err;
+                // console.log('successfully deleted from server: ' + fileName);
+              // });
           }
         });
   });

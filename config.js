@@ -28,6 +28,7 @@ function readConfig() {
   if (config.useDevelopmentStorage) {
     config.connectionString = storage.generateDevelopmentStorageCredentials();
   }
+
   return config;
 }
 
