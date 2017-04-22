@@ -24,26 +24,29 @@ const blobService = azure.createBlobService(config.connectionString);
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', function(req, res) {
-	res.redirect('/upload');
+  res.redirect('/upload');
 });
 
 var captureOpts = {
-    width: 1280,
-    height: 720,
-    delay: 0,
-    quality: 100,
-    output: "jpeg",
-    device: false,
-    callbackReturn: "base64",
-    verbose: false
+  width: 1280,
+  height: 720,
+  delay: 0,
+  quality: 100,
+  output: "jpeg",
+  device: false,
+  callbackReturn: "base64",
+  verbose: false
 };
 
 app.get('/capture', function(req, res) {
-	function captureCallback(err, data) {
-		res.send("<img src='" + data + "'>");
-	}
 
-	NodeWebcam.capture( "test_picture", captureOpts, captureCallback);
+  require("node-webcam" ).capture( "test_picture", captureOpts, function(err, loc) {
+    if (!err) {
+      res.send("<img src=" + loc + " </p>");
+    }
+    else
+      console.log("capture error!");
+  });
 });
 
 app.post('/upload', function(req, res) {
