@@ -11,48 +11,66 @@ const app = express();
 const azure = require('azure-storage');
 const config = require('./config');
 const multiparty = require('multiparty');
+const caption = require('./caption');
 
 // var blobStorage = require('./storage');
 
 // default options
+
+const BLOB_BASE_URL = 'https://memezstorage.blob.core.windows.net/pictures/';
+
 const blobService = azure.createBlobService(config.connectionString);
 
 app.set('port', process.env.PORT || 3000);
 
 app.post('/upload', function(req, res) {
-    let form = new multiparty.Form();
+  let name = null;
+  let form = new multiparty.Form();
 
-    form.on('part', function(part) {
-      if (part.filename) {
-        console.log(part.filename);
+  function errorHandler(error) {
+    res.send({ error: error });
+  }
 
-        let size = part.byteCount - part.byteOffset;
-        let name = part.filename;
+  function captionSuccess(caption) {
+    res.send({ caption: caption });
+  }
 
-        blobService.createBlockBlobFromStream('pictures', name, part, size, function(error) {
-          if (error) {
-            res.send({ Grrr: error });
-          } else {
-            res.send('OK');
-          }
-        });
-      } else {
-          form.handlePart(part);
-      }
-    });
+  function blobSaved(error) {
+    if (error) {
+      res.send({ Grrr: error });
+      return;
+    }
+    
+    console.log('Creating blob at URL:', BLOB_BASE_URL + name);
 
-    form.parse(req);
+    caption.getCaptionFromUrl(BLOB_BASE_URL + name)
+           .then(captionSuccess, errorHandler);
+  }
+
+  form.on('part', function(part) {
+    if (part.filename) {
+      let size = part.byteCount - part.byteOffset;
+
+      name = part.filename;
+
+      blobService.createBlockBlobFromStream('pictures', name, part, size, blobSaved);
+
+      return;
+    }
+
+    form.handlePart(part);
+  });
+
+  form.parse(req);
 });
 
-const API_BASE_URL = 'http://icaption.azurewebsites.net/';
-// const API_BASE_URL = 'http://localhost:3000/';
 
 app.get('/upload', function(req, res) {
   res.send("<html>" +
               "<body>" +
                 "<form ref='uploadForm' " +
                   "id='uploadForm' " +
-                  "action='" + API_BASE_URL + "upload' " +
+                  "action='/upload' " +
                   "method='post' " +
                   "encType='multipart/form-data'>" +
                     "<input type='file' name='sampleFile' />" +

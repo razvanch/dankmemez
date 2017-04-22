@@ -52,36 +52,38 @@ function extractCaption(body) {
     return null;
 }
 
-function getCaptions() {
-    const baseUrl = 'https://memezstorage.blob.core.windows.net/demoblockblobcontainer/picture'
+module.exports.getCaptionFromUrl = getCaptionFromUrl;
 
-    let i = 0;
-    let done = 0;
-    let images = [];
+// function getCaptions() {
+//     const baseUrl = 'https://memezstorage.blob.core.windows.net/demoblockblobcontainer/picture'
 
-    for (i = 0; i < 10; i++) {
-        let index = i;
-        let url = baseUrl + index.toString();
+//     let i = 0;
+//     let done = 0;
+//     let images = [];
 
-        images.push({});
+//     for (i = 0; i < 10; i++) {
+//         let index = i;
+//         let url = baseUrl + index.toString();
 
-        getCaptionFromUrl(url).then(function(caption) {
-            images[index].url = url;
-            images[index].caption = caption;
+//         images.push({});
 
-            done++;
+//         getCaptionFromUrl(url).then(function(caption) {
+//             images[index].url = url;
+//             images[index].caption = caption;
 
-            if (done == 10) {
-                console.log(images);
-            }
-        }, function(err) {
-            console.log(err);
-        });
-    }
-}
+//             done++;
 
-getCaptionFromUrl('https://scontent.xx.fbcdn.net/v/t34.0-12/18072828_1311417535608377_424380262_n.jpg?oh=8da272a8f3ead657f41036c0a9e86879&oe=58FD7AAB').then(function(caption) {
-    console.log(caption);
-}, function(err) {
-    console.log(err);
-});
+//             if (done == 10) {
+//                 console.log(images);
+//             }
+//         }, function(err) {
+//             console.log(err);
+//         });
+//     }
+// }
+
+// getCaptionFromUrl('https://scontent.xx.fbcdn.net/v/t34.0-12/18072828_1311417535608377_424380262_n.jpg?oh=8da272a8f3ead657f41036c0a9e86879&oe=58FD7AAB').then(function(caption) {
+//     console.log(caption);
+// }, function(err) {
+//     console.log(err);
+// });
