@@ -30,7 +30,7 @@ app.get('/images', function(req, res) {
               "<body>" +
                 "<form ref='uploadForm' " +
                   "id='uploadForm' " +
-                  "action='http://localhost:3000/images' " +
+                  "action='http://icaption.azurewebsites.net/images' " +
                   "method='post' " +
                   "encType='multipart/form-data'>" +
                     "<input type='file' name='sampleFile' />" +
