@@ -18,7 +18,8 @@
   "dependencies": {
     "express": "~3.1.0",
     "express-fileupload": "^0.1.2",
-    "jade": "*"
+    "jade": "*",
+	"node-webcam": "*"
   },
   "noAnalyze": true,
   "license": "Apache",
