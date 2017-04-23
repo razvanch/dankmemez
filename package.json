@@ -16,18 +16,18 @@
     "express"
   ],
   "dependencies": {
+	"azure-storage": "*",
     "express": "~3.1.0",
     "express-fileupload": "^0.1.2",
     "jade": "*",
-	"node-webcam": "*",
 	"lodash": "*",
-	"azure-storage": "*",
 	"multiparty": "*",
-	"mongoose": "*"
+	"mongoose": "*",
+	"node-webcam": "*"
   },
   "noAnalyze": true,
   "license": "Apache",
   "engines": {
-    "node": "~0.10.0 || ~4.2.0"
+    "node": "~5.0.0"
   }
 }

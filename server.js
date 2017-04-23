@@ -170,8 +170,6 @@ app.get('/upload', function(req, res) {
 });
 
 app.get('/feed', function(req, res) {
-  
-
   CaptionImage.find({}, function(err, images) {
     if (err) throw err;
 
