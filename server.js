@@ -95,7 +95,13 @@ app.get('/capture', function(req, res) {
 app.post('/upload', function(req, res) {
   let name = null;
   let form = new multiparty.Form();
-  let personal = req.query.personal ? true : false;
+  let personal = req.query.personal || "false";
+
+  if (personal === "true") {
+    personal = true;
+  } else {
+    personal = false;
+  }
 
   function errorHandler(error) {
     res.send({ error: error });
@@ -211,7 +217,6 @@ app.get('/feed', function(req, res) {
 app.get('/you', function(req, res) {
   let page = req.query.page || 1;
   let perPage = req.query.perPage || 16;
-  let personal = req.query.personal ? true : false;
 
   if (page < 0) {
     page = 1;
