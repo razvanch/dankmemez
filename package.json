@@ -19,7 +19,11 @@
     "express": "~3.1.0",
     "express-fileupload": "^0.1.2",
     "jade": "*",
-	"node-webcam": "*"
+	"node-webcam": "*",
+	"lodash": "*",
+	"azure-storage": "*",
+	"multiparty": "*",
+	"mongoose": "*"
   },
   "noAnalyze": true,
   "license": "Apache",
