@@ -28,6 +28,6 @@
   "noAnalyze": true,
   "license": "Apache",
   "engines": {
-    "node": "~5.0.0"
+    "node": "5.8.0"
   }
 }
