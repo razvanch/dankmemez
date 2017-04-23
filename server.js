@@ -59,7 +59,7 @@ app.get('/capture', function(req, res) {
     });
 
     image.save(function(err) {
-      if (err) throw err;
+      if (err) res.error(err.message);
 
       res.redirect('/feed');
     });
@@ -108,7 +108,7 @@ app.post('/upload', function(req, res) {
     });
 
     image.save(function(err) {
-      if (err) throw err;
+      if (err) res.error(err.message);
 
       if (req.headers['x-async']) {
         res.json(image);
@@ -173,27 +173,44 @@ app.get('/upload', function(req, res) {
 });
 
 app.get('/feed', function(req, res) {
-  CaptionImage.find({}, function(err, images) {
-    if (err) throw err;
+  let page = req.query.page || 1;
+  let per_page = req.query.per_page || 16;
+
+  if (page < 0) {
+    page = 1;
+  }
+
+  if (per_page < 0 || per_page > 50) {
+    per_page = 16;
+  }
+
+  CaptionImage.find({})
+              .limit(per_page)
+              .skip(per_page * (page - 1))
+              .exec(function(err, images) {
+    if (err) res.error(err.message);
 
     //res.json(images);
     var dataArray = Object.keys(images).map((k) => images[k]);
-    res.render('imageFeed', {data: _.chunk(dataArray, 4)});
+    res.render('imageFeed', {data: _.chunk(dataArray, 4),
+                             per_page: per_page,
+                             page: page});
   });
 });
 
 app.get('/images', function(req, res) {
   CaptionImage.find({}, function(err, images) {
-    if (err) throw err;
+    if (err) res.error(err.message);
 
     res.json(images);
   });
 });
 
 blobService.createContainerIfNotExists('pictures', {publicAccessLevel : 'blob'}, function (error) {
-  if (error) throw error;
+  if (error) res.error(error.message);
 
   http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
   });
 });
+
