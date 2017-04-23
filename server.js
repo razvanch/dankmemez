@@ -179,6 +179,14 @@ app.get('/feed', function(req, res) {
   });
 });
 
+app.get('/images', function(req, res) {
+  CaptionImage.find({}, function(err, images) {
+    if (err) throw err;
+
+    res.json(images);
+  });
+});
+
 blobService.createContainerIfNotExists('pictures', {publicAccessLevel : 'blob'}, function (error) {
   if (error) throw error;
 
