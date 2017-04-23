@@ -3,10 +3,6 @@ body {
   font-family: Jura;
 }
 
-a {
-  color: #00B7FF;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -80,9 +76,11 @@ a {
 .feedImg {
   width: 250px;
   border-radius: 5px;
+  position: relative;
 }
 
 .imgWrapper {
+  position: relative;
   display: inline-block;
   vertical-align: top;
   margin: 10px;
@@ -90,10 +88,39 @@ a {
   background-color: #e6e6e6;
 }
 
-.imgWrapper > div {
+.feedImg + div {
   color: #2e41a9;
   text-align: center;
   overflow: hidden;
   height: 20px;
   width: 250px;
+}
+
+.feedImgOverlay {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  visibility: hidden;
+  left: calc(50% - 25px);
+  top: calc(50% - 25px);
+  color: azure;
+  font-weight: bold;
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+.imgWrapper:hover .feedImg {
+  opacity: 0.5;
+}
+
+.imgWrapper:hover .feedImgOverlay {
+  visibility: visible;
+  text-align: center;
+}
+
+tr - a {
+  text-decoration: none;
+  color: azure;
+  display: block;
+  margin: 3px;
 }

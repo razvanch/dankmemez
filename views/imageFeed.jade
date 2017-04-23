@@ -1,5 +1,5 @@
 - var pageNo = parseInt(page)
-- var prevPage = pageNo > 0 ? pageNo - 1 : 0
+- var prevPage = pageNo > 1 ? pageNo - 1 : 1
 - var nextPage = pageNo + 1
 
 html
@@ -11,8 +11,7 @@ html
   script.
     document.onkeydown = function(evt) {
       evt = evt || window.event
-      console.log(evt.keyCode)
-      if (evt.keyCode == 37)
+      if (evt.keycode == 37)
         window.location.href = '/feed?page=#{prevPage}&perpage=#{perPage}';
       else if (evt.keyCode == 39)
         window.location.href = '/feed?page=#{nextPage}&perpage=#{perPage}';
@@ -28,6 +27,15 @@ html
             div(class='imgWrapper')
               img(src=img.url, class='feedImg')
               div(title=img.caption) #{img.caption}
+              div(class='feedImgOverlay')
+                table
+                  tr
+                    a(class='fa fa-caret-up')
+                  tr
+                    #{img.votes}
+                  tr
+                    a(class='fa fa-caret-down')
+
     div(class='navigationRight')
       a(href='/feed?page=#{nextPage}&perpage=#{perPage}', class='fa fa-caret-right')
  
