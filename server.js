@@ -95,6 +95,7 @@ app.get('/capture', function(req, res) {
 app.post('/upload', function(req, res) {
   let name = null;
   let form = new multiparty.Form();
+  let personal = req.query.personal ? true : false;
 
   function errorHandler(error) {
     res.send({ error: error });
@@ -104,7 +105,8 @@ app.post('/upload', function(req, res) {
     const image = new CaptionImage({
       url: BLOB_BASE_URL + name,
       original_name: name,
-      caption: caption
+      caption: caption,
+      personal: personal
     });
 
     image.save(function(err) {
@@ -206,6 +208,33 @@ app.get('/feed', function(req, res) {
   });
 });
 
+app.get('/you', function(req, res) {
+  let page = req.query.page || 1;
+  let perPage = req.query.perPage || 16;
+  let personal = req.query.personal ? true : false;
+
+  if (page < 0) {
+    page = 1;
+  }
+
+  if (perPage < 0 || perPage > 50) {
+    perPage = 16;
+  }
+
+  CaptionImage.find({ personal: personal })
+              .limit(perPage)
+              .skip(perPage * (page - 1))
+              .exec(function(err, images) {
+    if (err) res.error(err.message);
+
+    //res.json(images);
+    var dataArray = Object.keys(images).map((k) => images[k]);
+    res.render('imageFeed', {data: _.chunk(dataArray, 4),
+                             perPage: perPage,
+                             page: page});
+  });
+});
+
 app.get('/images', function(req, res) {
   CaptionImage.find({}, function(err, images) {
     if (err) return next(err);
@@ -222,7 +251,7 @@ app.get('/images/:id', function(req, res) {
   });
 });
 
-app.post('/images/:id/vote', function(req, res) {
+app.get('/images/:id/vote', function(req, res) {
   let positive = req.query.positive || 'true';
 
   positive = positive.toLowerCase() === 'true';
