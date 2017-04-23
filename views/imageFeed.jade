@@ -3,19 +3,37 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Jura')
     link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
+    script(type='text/javascript', src='/webcam.min.js')
   body
+    div(id='cameraDiv')
+    div(id='results')
     div(class='feedWrapper')
       each line in data
         div(class='feedLine')
           each img in line
-            div(class='imgWrapper')
+            div(title=img.caption, class='imgWrapper')
               img(src=img.url, class='feedImg')
-              div(title=img.caption) #{img.caption}
+              div #{img.caption}
     div(class='footerWrapper')
-      a(href='/capture', class='captureButton')
-        span(class='fa fa-camera')
-      form(ref='uploadForm', action='/upload', method='post', encType='multipart/form-data')
+     form(ref='uploadForm', action='/upload', method='post', encType='multipart/form-data')
+        div(class='captureButton')
+          button(onclick="take_snapshot()", class='fa fa-camera')
+      
         div(class='fileInputBox') +
           input(type='file', class='fileInput', name='sampleFile')
         div(class='fileSubmitBox') =
           input(type='submit', class='fileSubmit')
+    script.
+      Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+      });
+      Webcam.attach('#cameraDiv');
+
+      function take_snapshot() {
+        Webcam.snap(function (data_url) {
+          document.getElementById('results').innerHTML = '<img src="' + data_url + '">';
+        });
+      }
