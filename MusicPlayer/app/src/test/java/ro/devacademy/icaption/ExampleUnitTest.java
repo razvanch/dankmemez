@@ -1,4 +1,4 @@
-package ro.devacademy.musicplayer;
+package ro.devacademy.icaption;
 
 import org.junit.Test;
 

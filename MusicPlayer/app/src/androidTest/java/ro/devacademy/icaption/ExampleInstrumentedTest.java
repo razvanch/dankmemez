@@ -1,4 +1,4 @@
-package ro.devacademy.musicplayer;
+package ro.devacademy.icaption;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

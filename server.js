@@ -17,7 +17,6 @@ const _ = require('lodash')
 
 mongoose.connect(config.mongodbConnectionString);
 
-
 const CaptionImage = require('./model');
 
 const blobService = azure.createBlobService(config.connectionString);
@@ -27,7 +26,6 @@ const BLOB_BASE_URL = 'https://memezstorage.blob.core.windows.net/pictures/';
 app.use(express.static('public'))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
-
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', function(req, res) {
@@ -46,15 +44,52 @@ var captureOpts = {
 };
 
 app.get('/capture', function(req, res) {
+  var fileName = "test_picture";
+  var name = "screenshot-" + Date.now();
 
-  require("node-webcam" ).capture( "test_picture", captureOpts, function(err, loc) {
-    if (!err) {
-      url = req.protocol + '://' + req.get('host') + '/' + loc
-      res.send("<img src=" + url + " </p>");
+  function errorHandler(error) {
+    res.send({ error: error });
+  }
+
+  function captionSuccess(caption) {
+    const image = new CaptionImage({
+      url: BLOB_BASE_URL + name,
+      original_name: name,
+      caption: caption
+    });
+
+    image.save(function(err) {
+      if (err) throw err;
+
+      res.redirect('/feed');
+    });
+  }
+
+  function blobSaved(error, result, response) {
+    if (error) {
+      res.send({ Grrr: error });
+      return;
+    }
+    
+    console.log('Creating blob at URL:', BLOB_BASE_URL + name);
+
+    caption.getCaptionFromUrl(BLOB_BASE_URL + name)
+           .then(captionSuccess, errorHandler);
+
+  }
+
+  function handleSave(error, loc) {
+    if (!error) {
+      blobService.createBlockBlobFromLocalFile('pictures',
+                                                name,
+                                                loc,
+                                                blobSaved);
     }
     else
       console.log("capture error!");
-  });
+  }
+
+  require("node-webcam" ).capture( "./public" + fileName, captureOpts, handleSave);
 });
 
 app.post('/upload', function(req, res) {
@@ -85,7 +120,7 @@ app.post('/upload', function(req, res) {
       res.send({ Grrr: error });
       return;
     }
-    
+
     console.log('Creating blob at URL:', BLOB_BASE_URL + name);
 
     caption.getCaptionFromUrl(BLOB_BASE_URL + name)

@@ -1,4 +1,4 @@
-package ro.devacademy.musicplayer.models;
+package ro.devacademy.icaption.models;
 
 /**
  * Created by razvan on 01.03.2017.
