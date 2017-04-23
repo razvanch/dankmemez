@@ -2,6 +2,7 @@ html
   head
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Jura')
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
   body
     div(class='feedWrapper')
       each line in data
@@ -11,7 +12,9 @@ html
               img(src=img.url, class='feedImg')
               div(title=img.caption) #{img.caption}
     div(class='footerWrapper')
-      form(ref='uploadForm', class='addButton', action='/upload', method='post', encType='multipart/form-data')
+      a(href='/capture', class='captureButton')
+        span(class='fa fa-camera')
+      form(ref='uploadForm', action='/upload', method='post', encType='multipart/form-data')
         div(class='fileInputBox') +
           input(type='file', class='fileInput', name='sampleFile')
         div(class='fileSubmitBox') =

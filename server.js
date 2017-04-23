@@ -29,7 +29,7 @@ app.set('view engine', 'jade')
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', function(req, res) {
-  res.redirect('/upload');
+  res.redirect('/feed');
 });
 
 var captureOpts = {
