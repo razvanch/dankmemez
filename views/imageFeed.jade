@@ -1,39 +1,41 @@
+- var pageNo = parseInt(page)
+- var prevPage = pageNo > 0 ? pageNo - 1 : 0
+- var nextPage = pageNo + 1
+
 html
   head
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Jura')
     link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
-    script(type='text/javascript', src='/webcam.min.js')
+
+  script.
+    document.onkeydown = function(evt) {
+      evt = evt || window.event
+      console.log(evt.keyCode)
+      if (evt.keyCode == 37)
+        window.location.href = '/feed?page=#{prevPage}&perpage=#{perPage}';
+      else if (evt.keyCode == 39)
+        window.location.href = '/feed?page=#{nextPage}&perpage=#{perPage}';
+    }
+
   body
-    div(id='cameraDiv')
-    div(id='results')
+    div(class='navigationLeft')
+      a(href='/feed?page=#{prevPage}&perpage=#{perPage}', class='fa fa-caret-left')
     div(class='feedWrapper')
       each line in data
         div(class='feedLine')
           each img in line
-            div(title=img.caption, class='imgWrapper')
+            div(class='imgWrapper')
               img(src=img.url, class='feedImg')
-              div #{img.caption}
+              div(title=img.caption) #{img.caption}
+    div(class='navigationRight')
+      a(href='/feed?page=#{nextPage}&perpage=#{perPage}', class='fa fa-caret-right')
+ 
     div(class='footerWrapper')
-     form(ref='uploadForm', action='/upload', method='post', encType='multipart/form-data')
-        div(class='captureButton')
-          button(onclick="take_snapshot()", class='fa fa-camera')
-      
+      a(href='/capture', class='captureButton')
+        span(class='fa fa-camera')
+      form(ref='uploadForm', action='/upload', method='post', encType='multipart/form-data')
         div(class='fileInputBox') +
           input(type='file', class='fileInput', name='sampleFile')
         div(class='fileSubmitBox') =
           input(type='submit', class='fileSubmit')
-    script.
-      Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-      });
-      Webcam.attach('#cameraDiv');
-
-      function take_snapshot() {
-        Webcam.snap(function (data_url) {
-          document.getElementById('results').innerHTML = '<img src="' + data_url + '">';
-        });
-      }

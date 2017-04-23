@@ -8,71 +8,92 @@ a {
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.navigationLeft, .navigationRight {
+  width: 5%;
+  height: 100%;
+  position: fixed;
+  font-size: 50px;
+  top: 50%;
+}
+
+.navigationLeft > a, .navigationRight > a {
+  text-decoration: none;
+  color: #a5a3a3;
+}
+
+.navigationLeft {
+  left: 3%;
+}
+
+.navigationRight {
+  left: 97%;
 }
 
 .footerWrapper {
-	position: fixed;
-	top: 75%;
-	left: 93%;
-	width: 100px;
+  position: fixed;
+  top: 75%;
+  left: 93%;
+  width: 100px;
 }
 
 .fileInput, .fileSubmit {
-	opacity: 0;
-    width: 40px;
-    height: 40px;
-	position: absolute;
-    top: 0;
-    left: 0;
-	cursor: pointer;
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
 }
 
 .fileInputBox, .fileSubmitBox, .captureButton {
-	width: 40px;
-    height: 40px;
-    text-align: center;
-    line-height: 40px;
-	border-radius: 50%;
-	background-color: #e6e6e6;
-	position: relative;
-	display: block;
-	cursor: pointer;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  background-color: #e6e6e6;
+  position: relative;
+  display: block;
+  cursor: pointer;
 }
 
 .capturebutton {
-	padding: 10px 0px;
-	color: #6f6f6f;
+  padding: 10px 0px;
+  color: #6f6f6f;
 }
 
 .feedWrapper {
-	width: 95%;
-	margin: auto;
-	padding-top: 20px;
-    border-top: 1px rgb(195, 195, 195) solid;
+  width: 95%;
+  margin: auto;
+  padding-top: 20px;
+  border-top: 1px rgb(195, 195, 195) solid;
 }
 
 .feedLine {
-	padding: 10px;
+  padding: 10px;
 }
 
 .feedImg {
-	width: 250px;
-	border-radius: 5px;
+  width: 250px;
+  border-radius: 5px;
 }
 
 .imgWrapper {
-	display: inline-block;
-	vertical-align: top;
-	margin: 10px;
-	padding: 4px;
-	background-color: #e6e6e6;
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px;
+  padding: 4px;
+  background-color: #e6e6e6;
 }
 
 .imgWrapper > div {
-	color: #2e41a9;
-	text-align: center;
-	overflow: hidden;
-    height: 20px;
-    width: 250px;
+  color: #2e41a9;
+  text-align: center;
+  overflow: hidden;
+  height: 20px;
+  width: 250px;
 }

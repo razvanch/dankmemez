@@ -174,26 +174,26 @@ app.get('/upload', function(req, res) {
 
 app.get('/feed', function(req, res) {
   let page = req.query.page || 1;
-  let per_page = req.query.per_page || 16;
+  let perPage = req.query.perPage || 16;
 
   if (page < 0) {
     page = 1;
   }
 
-  if (per_page < 0 || per_page > 50) {
-    per_page = 16;
+  if (perPage < 0 || perPage > 50) {
+    perPage = 16;
   }
 
   CaptionImage.find({})
-              .limit(per_page)
-              .skip(per_page * (page - 1))
+              .limit(perPage)
+              .skip(perPage * (page - 1))
               .exec(function(err, images) {
     if (err) res.error(err.message);
 
     //res.json(images);
     var dataArray = Object.keys(images).map((k) => images[k]);
     res.render('imageFeed', {data: _.chunk(dataArray, 4),
-                             per_page: per_page,
+                             perPage: perPage,
                              page: page});
   });
 });
