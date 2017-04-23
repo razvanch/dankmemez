@@ -226,7 +226,7 @@ app.get('/you', function(req, res) {
     perPage = 16;
   }
 
-  CaptionImage.find({ personal: personal })
+  CaptionImage.find({ personal: true })
               .limit(perPage)
               .skip(perPage * (page - 1))
               .exec(function(err, images) {
@@ -238,6 +238,15 @@ app.get('/you', function(req, res) {
                              perPage: perPage,
                              page: page});
   });
+});
+
+app.get('/you/remove', function(req, res) {
+  CaptionImage.remove({ personal: true })
+              .exec(function(err, res) {
+                if (err) return next(err);
+
+                res.redirect('/you');
+              });
 });
 
 app.get('/images', function(req, res) {
