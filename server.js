@@ -208,11 +208,43 @@ app.get('/feed', function(req, res) {
 
 app.get('/images', function(req, res) {
   CaptionImage.find({}, function(err, images) {
-    if (err) res.error(err.message);
+    if (err) return next(err);
 
     res.json(images);
   });
 });
+
+app.get('/images/:id', function(req, res) {
+  CaptionImage.findOne({ _id: req.params.id }, function(err, image) {
+    if (err) return next(err);
+
+    res.json(image);
+  });
+});
+
+app.post('/images/:id/vote', function(req, res) {
+  let positive = req.query.positive || 'true';
+
+  positive = positive.toLowerCase() === 'true';
+
+  if (!req.params.id) return next('Image ID is mandatory');
+
+  CaptionImage.update({ _id: req.params.id },
+                      { $inc: { votes: positive ? 1 : -1 } },
+                      function(err, image) {
+                        if (err) return next(err);
+
+                        res.json(image);
+                      });
+});
+
+function errorHandler (err, req, res, next) {
+  res.status(500);
+  res.json({ error: err });
+}
+
+app.use(errorHandler);
+// CaptionImage.remove({}).then(function(err) {console.log('yolo swag')});
 
 blobService.createContainerIfNotExists('pictures', {publicAccessLevel : 'blob'}, function (error) {
   if (error) res.error(error.message);
