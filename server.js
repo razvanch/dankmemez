@@ -110,8 +110,11 @@ app.post('/upload', function(req, res) {
     image.save(function(err) {
       if (err) throw err;
 
-			res.redirect('/feed');
-      //res.json(image);
+      if (req.headers['x-async']) {
+        res.json(image);
+      } else {
+        res.redirect('/feed');
+      }
     });
   }
 
@@ -146,7 +149,7 @@ app.post('/upload', function(req, res) {
 
       return;
     }
-  	console.log(form, form.handlepart)
+
     form.handlePart(part);
   });
 
