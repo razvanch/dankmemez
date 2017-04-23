@@ -131,6 +131,10 @@ app.post('/upload', function(req, res) {
   }
 
   form.on('part', function(part) {
+    part.on('error', function(){
+      res.json({ error: 'aborted '});
+    });
+
     if (part.filename) {
       let size = part.byteCount - part.byteOffset;
 
@@ -151,6 +155,10 @@ app.post('/upload', function(req, res) {
     }
 
     form.handlePart(part);
+  });
+
+  form.on('error', function() {
+    res.json({ error: 'aborted' });
   });
 
   form.parse(req);
