@@ -119,7 +119,7 @@ app.post('/upload', function(req, res) {
       res.send({ Grrr: error });
       return;
     }
-    
+
     console.log('Creating blob at URL:', BLOB_BASE_URL + name);
 
     caption.getCaptionFromUrl(BLOB_BASE_URL + name)

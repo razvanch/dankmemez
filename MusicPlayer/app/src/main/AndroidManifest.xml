@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ro.devacademy.musicplayer">
+    package="ro.devacademy.icaption">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -9,7 +9,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity android:name="ro.devacademy.icaption.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
